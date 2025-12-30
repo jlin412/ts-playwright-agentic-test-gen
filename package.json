@@ -1,0 +1,23 @@
+{
+  "name": "realworld-playwright-tests",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test --project=api",
+    "test:ui": "playwright test --project=ui",
+    "cucumber": "node --loader ts-node/esm ./node_modules/@cucumber/cucumber/bin/cucumber-js --import cucumber/support/**/*.ts --import cucumber/steps/**/*.ts cucumber/features/**/*.feature",
+    "cucumber:api": "node --loader ts-node/esm ./node_modules/@cucumber/cucumber/bin/cucumber-js --import cucumber/support/**/*.ts --import cucumber/steps/**/*.ts --tags @api cucumber/features/**/*.feature",
+    "cucumber:e2e": "node --loader ts-node/esm ./node_modules/@cucumber/cucumber/bin/cucumber-js --import cucumber/support/**/*.ts --import cucumber/steps/**/*.ts --tags @ui cucumber/features/**/*.feature",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^22.10.0",
+    "@cucumber/cucumber": "^11.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0"
+  }
+}

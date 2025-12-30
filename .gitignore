@@ -1,0 +1,19 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Cucumber / test artifacts (project-local conventions)
+/cucumber-report/
+/cucumber-reports/
+/cucumber/results/
+/cucumber/.reports/
+
+# Generic local artifacts
+*.log
+.DS_Store
+.env
