@@ -40,39 +40,6 @@ npm run test:api
 npm run test:ui
 ```
 
-## Cucumber report
-
-The Cucumber runner writes an HTML report to `cucumber-report/cucumber.html`.
-
-Open it (macOS):
-
-```bash
-npm run cucumber:open-report
-```
-
-Run a suite and auto-open the report when it finishes:
-
-```bash
-npm run cucumber:open
-```
-
-Example (run the failing demo scenario and open the report):
-
-```bash
-npm run cucumber:open -- --tags @tracefail
-```
-
-Run UI scenarios headed (useful for debugging):
-
-```bash
-npm run cucumber:e2e:firefox:headed
-npm run cucumber:e2e:webkit:headed
-```
-
-Optional:
-
-- `CUCUMBER_SLOWMO=200` to slow down actions
-
 ## Playwright MCP
 
 This repo is already configured for VS Code MCP at `.vscode/mcp.json` using `@playwright/mcp`.
