@@ -1,5 +1,5 @@
 import { test as base, createBdd } from 'playwright-bdd';
-import { type Page, expect, type APIRequestContext } from '@playwright/test';
+import { type Page, expect, type APIRequestContext, type BrowserContext } from '@playwright/test';
 
 import { HomePage } from '../../specs/pom/home.page';
 import { TagsApi } from '../../specs/som/tags.api';
@@ -8,28 +8,48 @@ type ApiState = {
   tagsResponse?: { tags: string[] };
 };
 
-type Fixtures = {
-  page: Page;
-  request: APIRequestContext;
+// World class for Cucumber-style steps
+export class World {
+  page!: Page;
+  request!: APIRequestContext;
+  context!: BrowserContext;
 
-  homePage: HomePage;
-  tagsApi: TagsApi;
-  apiState: ApiState;
+  homePage!: HomePage;
+  tagsApi!: TagsApi;
+  apiState: ApiState = {};
+
+  constructor(
+    public readonly $page: Page,
+    public readonly $request: APIRequestContext,
+    public readonly $context: BrowserContext,
+  ) {
+    this.page = $page;
+    this.request = $request;
+    this.context = $context;
+  }
+
+  async init() {
+    this.homePage = new HomePage(this.page);
+    this.tagsApi = new TagsApi(this.request);
+    this.apiState = {};
+  }
+}
+
+type WorldFixture = {
+  world: World;
 };
 
-export const test = base.extend<Fixtures>({
-  homePage: async ({ page }, use) => {
-    await use(new HomePage(page));
-  },
-  tagsApi: async ({ request }, use) => {
-    await use(new TagsApi(request));
-  },
-  apiState: async ({}, use) => {
-    await use({});
+export const test = base.extend<WorldFixture>({
+  world: async ({ page, request, context }, use) => {
+    const world = new World(page, request, context);
+    await world.init();
+    await use(world);
   },
 });
 
-// Playwright-style steps: fixtures are the first arg.
-export const { Given, When, Then } = createBdd(test);
+// Cucumber-style steps: access fixtures via `this` (World instance)
+export const { Given, When, Then, Before, After } = createBdd(test, {
+  worldFixture: 'world',
+});
 
 export { expect };
