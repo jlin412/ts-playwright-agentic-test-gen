@@ -125,7 +125,8 @@ async function main() {
 
   console.log('Serving cucumber-report over HTTPS so trace.playwright.dev can fetch trace zips.');
   console.log('If Trace Viewer still cannot load, your browser must trust the local cert:');
-  console.log('  npm run cucumber:trust-cert');
+  console.log(`  Configure your browser or OS to trust the local certificate at: ${CERT_PATH}`);
+  console.log('  Refer to the project documentation for detailed trust-configuration steps.');
 
   const args = [
     REPORT_DIR,
