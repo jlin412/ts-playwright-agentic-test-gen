@@ -62,6 +62,17 @@ Example (run the failing demo scenario and open the report):
 npm run cucumber:open -- --tags @tracefail
 ```
 
+Run UI scenarios headed (useful for debugging):
+
+```bash
+npm run cucumber:e2e:firefox:headed
+npm run cucumber:e2e:webkit:headed
+```
+
+Optional:
+
+- `CUCUMBER_SLOWMO=200` to slow down actions
+
 ## Playwright MCP
 
 This repo is already configured for VS Code MCP at `.vscode/mcp.json` using `@playwright/mcp`.

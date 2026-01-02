@@ -23,10 +23,26 @@ export default defineConfig({
       },
     },
     {
-      name: 'ui',
+      name: 'ui-chromium',
       testMatch: /specs\/e2e\/.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
+        baseURL: uiURL,
+      },
+    },
+    {
+      name: 'ui-firefox',
+      testMatch: /specs\/e2e\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Firefox'],
+        baseURL: uiURL,
+      },
+    },
+    {
+      name: 'ui-webkit',
+      testMatch: /specs\/e2e\/.*\.spec\.ts/,
+      use: {
+        ...devices['Desktop Safari'],
         baseURL: uiURL,
       },
     },
