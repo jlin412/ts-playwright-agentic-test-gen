@@ -147,7 +147,7 @@ async function main() {
     env: process.env,
   });
 
-  child.on('exit', (code) => process.exit(code ?? 0));
+  child.on('exit', (code) => process.exit(code !== null && code !== undefined ? code : 1));
 }
 
 await main();
