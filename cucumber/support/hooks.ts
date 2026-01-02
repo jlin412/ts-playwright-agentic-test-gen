@@ -37,7 +37,7 @@ After({ tags: '@ui' }, async function (this: RealWorldWorld, scenario) {
     // Attach both plain text and HTML so the report shows a clickable link.
     const fileUrl = `file://${traceAbsolutePath}`;
     await this.attach(`Open trace locally: npx playwright show-trace ${traceRelativePath}`, 'text/plain');
-    void fileUrl;
+    await this.attach(`<a href="${fileUrl}">Open trace file</a>`, 'text/html');
   }
 
   if (failed && this.page) {
