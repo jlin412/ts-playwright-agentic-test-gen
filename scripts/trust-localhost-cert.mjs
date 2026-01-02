@@ -33,7 +33,7 @@ function run(cmd, args) {
 async function main() {
   if (!(await exists(CERT_PATH))) {
     console.error('Localhost cert not found. Generate it by running:');
-    console.error('  npm run cucumber:serve-report');
+    console.error('  npm run cucumber:open-report');
     process.exit(1);
   }
 
