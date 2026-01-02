@@ -17,3 +17,6 @@ node_modules/
 *.log
 .DS_Store
 .env
+
+# Local HTTPS certs for report serving
+/.cert/
