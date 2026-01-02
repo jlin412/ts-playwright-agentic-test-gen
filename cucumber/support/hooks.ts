@@ -1,5 +1,5 @@
 import { After, Before } from '@cucumber/cucumber';
-import { chromium, request as playwrightRequest } from 'playwright';
+import { chromium, firefox, webkit, request as playwrightRequest } from 'playwright';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -8,7 +8,17 @@ import { HomePage } from '../../specs/pom/home.page.ts';
 import { TagsApi } from '../../specs/som/tags.api.ts';
 
 Before({ tags: '@ui' }, async function (this: RealWorldWorld) {
-  this.browser = await chromium.launch();
+  const browserName = (process.env.CUCUMBER_BROWSER ?? 'chromium').toLowerCase();
+  const browserType =
+    browserName === 'firefox' ? firefox : browserName === 'webkit' ? webkit : chromium;
+
+  const headed = ['1', 'true', 'yes'].includes(String(process.env.CUCUMBER_HEADED ?? '').toLowerCase());
+  const slowMo = Number(process.env.CUCUMBER_SLOWMO ?? '0') || undefined;
+
+  this.browser = await browserType.launch({
+    headless: headed ? false : undefined,
+    slowMo,
+  });
   this.context = await this.browser.newContext();
   this.page = await this.context.newPage();
 
