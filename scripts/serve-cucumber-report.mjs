@@ -76,7 +76,7 @@ CN = localhost
 
 [v3_req]
 subjectAltName = @alt_names
-keyUsage = keyEncipherment, dataEncipherment, digitalSignature
+keyUsage = digitalSignature
 extendedKeyUsage = serverAuth
 
 [alt_names]
