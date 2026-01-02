@@ -56,8 +56,8 @@ After({ tags: '@ui' }, async function (this: RealWorldWorld, scenario) {
   }
 
   // If the scenario passed, stop tracing without writing a file.
-  if (!failed) {
-    await this.context?.tracing.stop().catch(() => undefined);
+  if (!failed && this.context) {
+    await this.context.tracing.stop().catch(() => undefined);
   }
 
   await this.page?.close().catch(() => undefined);
