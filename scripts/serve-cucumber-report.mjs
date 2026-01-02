@@ -98,7 +98,7 @@ IP.2 = ::1
     '-out',
     CERT_PATH,
     '-days',
-    '3650',
+    '730',
     '-config',
     OPENSSL_CONFIG_PATH,
   ];
