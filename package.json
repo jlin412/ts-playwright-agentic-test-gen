@@ -10,12 +10,18 @@
     "test:ui:chromium": "playwright test --project=ui-chromium",
     "test:ui:firefox": "playwright test --project=ui-firefox",
     "test:ui:webkit": "playwright test --project=ui-webkit",
+    "bddgen": "bddgen -c playwright.bdd.config.ts --tags \"@smoke and not @tracefail\"",
+    "test:bdd": "npm run bddgen && playwright test -c playwright.bdd.config.ts",
+    "test:bdd:ui": "bddgen -c playwright.bdd.config.ts --tags \"@ui and @smoke and not @tracefail\" && playwright test -c playwright.bdd.config.ts --project=bdd-ui-chromium --ui",
+    "test:bdd:tracefail": "bddgen -c playwright.bdd.config.ts --tags \"@tracefail\" && playwright test -c playwright.bdd.config.ts --grep @tracefail",
     "report": "playwright show-report",
+    "report:bdd:html": "npx http-server ./cucumber-report -c-1 -a localhost -o index.html",
     "install:browsers": "playwright install"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.10.0",
+    "playwright-bdd": "^8.4.2",
     "typescript": "^5.7.0"
   }
 }

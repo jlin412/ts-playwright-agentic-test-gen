@@ -40,6 +40,22 @@ npm run test:api
 npm run test:ui
 ```
 
+## Playwright-BDD
+
+BDD feature files live under `bdd/features/` with step definitions in `bdd/steps/`.
+
+Generate + run smoke scenarios:
+
+```bash
+npm run test:bdd
+```
+
+Run the intentional failing BDD scenario (for trace/screenshot artifacts):
+
+```bash
+npm run test:bdd:tracefail
+```
+
 ## Playwright MCP
 
 This repo is already configured for VS Code MCP at `.vscode/mcp.json` using `@playwright/mcp`.
