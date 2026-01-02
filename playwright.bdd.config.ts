@@ -43,5 +43,21 @@ export default defineConfig({
         baseURL: uiURL,
       },
     },
+    {
+      name: 'bdd-ui-firefox',
+      testMatch: /.features-gen\/bdd\/features\/(smoke-ui|trace-fail)\.feature\.spec\.js/,
+      use: {
+        ...devices['Desktop Firefox'],
+        baseURL: uiURL,
+      },
+    },
+    {
+      name: 'bdd-ui-webkit',
+      testMatch: /.features-gen\/bdd\/features\/(smoke-ui|trace-fail)\.feature\.spec\.js/,
+      use: {
+        ...devices['Desktop Safari'],
+        baseURL: uiURL,
+      },
+    },
   ],
 });
