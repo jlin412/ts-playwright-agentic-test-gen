@@ -10,7 +10,8 @@
     "cucumber": "node scripts/run-cucumber.mjs",
     "cucumber:open": "node scripts/run-cucumber.mjs --open-report",
     "cucumber:api": "node scripts/run-cucumber.mjs --tags @api",
-    "cucumber:e2e": "node scripts/run-cucumber.mjs --tags @ui",
+    "cucumber:e2e": "node scripts/run-cucumber.mjs --tags \"@ui and not @tracefail\"",
+    "cucumber:tracefail": "node scripts/run-cucumber.mjs --tags @tracefail",
     "cucumber:open-report": "open cucumber-report/cucumber.html",
     "report": "playwright show-report",
     "install:browsers": "playwright install"
