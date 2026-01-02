@@ -18,7 +18,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   projects: [
-    {
+    {z
       name: 'api',
       testMatch: /specs\/api\/.*\.spec\.ts/,
       use: {
