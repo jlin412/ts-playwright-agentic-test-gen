@@ -40,38 +40,21 @@ npm run test:api
 npm run test:ui
 ```
 
-## Cucumber report
+## Playwright-BDD
 
-The Cucumber runner writes an HTML report to `cucumber-report/cucumber.html`.
+BDD feature files live under `bdd/features/` with step definitions in `bdd/steps/`.
 
-Open it (macOS):
-
-```bash
-npm run cucumber:open-report
-```
-
-Run a suite and auto-open the report when it finishes:
+Generate + run smoke scenarios:
 
 ```bash
-npm run cucumber:open
+npm run test:bdd
 ```
 
-Example (run the failing demo scenario and open the report):
+Run the intentional failing BDD scenario (for trace/screenshot artifacts):
 
 ```bash
-npm run cucumber:open -- --tags @tracefail
+npm run test:bdd:tracefail
 ```
-
-Run UI scenarios headed (useful for debugging):
-
-```bash
-npm run cucumber:e2e:firefox:headed
-npm run cucumber:e2e:webkit:headed
-```
-
-Optional:
-
-- `CUCUMBER_SLOWMO=200` to slow down actions
 
 ## Playwright MCP
 

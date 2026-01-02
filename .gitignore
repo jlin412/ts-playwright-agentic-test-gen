@@ -6,17 +6,9 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-
-# Cucumber / test artifacts (project-local conventions)
-/cucumber-report/
-/cucumber-reports/
-/cucumber/results/
-/cucumber/.reports/
+/.features-gen/
 
 # Generic local artifacts
 *.log
 .DS_Store
 .env
-
-# Local HTTPS certs for report serving
-/.cert/
