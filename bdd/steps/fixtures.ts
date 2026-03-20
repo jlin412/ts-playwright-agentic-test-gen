@@ -1,8 +1,8 @@
 import { test as base, createBdd } from 'playwright-bdd';
 import { type Page, expect, type APIRequestContext, type BrowserContext } from '@playwright/test';
 
-import { HomePage } from '../../specs/pom/home.page';
-import { TagsApi } from '../../specs/som/tags.api';
+import { HomePage } from '../../pom/home.page';
+import { TagsApi } from '../../som/tags.api';
 
 type ApiState = {
   tagsResponse?: { tags: string[] };

@@ -1,7 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 
-import { HomePage } from './pom/home.page';
-import { TagsApi } from './som/tags.api';
+import { HomePage } from '../pom/home.page';
+import { TagsApi } from '../som/tags.api';
 
 type Fixtures = {
   homePage: HomePage;
