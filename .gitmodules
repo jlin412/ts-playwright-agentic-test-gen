@@ -1,0 +1,6 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/codydale1/nestjs-realworld
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/gothinkster/react-redux-realworld-example-app
