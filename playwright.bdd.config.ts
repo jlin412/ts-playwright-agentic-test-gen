@@ -6,7 +6,7 @@ const uiURL = process.env.UI_URL ?? 'http://localhost:8080';
 
 const testDir = defineBddConfig({
   features: 'bdd/features/*.feature',
-  steps: 'bdd/steps/*.ts',
+  steps: ['bdd/steps/*.ts', 'pom/*.ts', 'som/*.ts'],
 });
 
 export default defineConfig({
