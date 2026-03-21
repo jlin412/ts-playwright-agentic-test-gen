@@ -3,23 +3,23 @@ import { test } from './fixtures';
 
 const { Before, After } = createBdd(test);
 
-Before(async () => {
+Before(async ({}) => {
   console.log(`[Before] Starting scenario...`);
 });
 
-Before({ tags: '@api' }, async () => {
+Before({ tags: '@api' }, async ({}) => {
   console.log(`[Before @api] Preparing API test environment...`);
 });
 
-Before({ tags: '@ui' }, async () => {
+Before({ tags: '@ui' }, async ({}) => {
   console.log(`[Before @ui] Preparing UI test environment...`);
 });
 
-After(async () => {
+After(async ({}) => {
   console.log(`[After] Scenario completed.`);
 });
 
-After({ tags: '@ui' }, async () => {
+After({ tags: '@ui' }, async ({ page }) => {
   // Take screenshot on UI test completion for debugging
   console.log(`[After @ui] UI scenario cleanup...`);
 });
