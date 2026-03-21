@@ -7,11 +7,41 @@ This folder contains a minimal Playwright test runner setup with two smoke suite
 
 ## Prereqs
 
-Start the stack from the repo root:
+- Docker and Docker Compose
+- Node.js 20+
+
+## Backend + Frontend Without Copying Code
+
+This repository is designed to treat backend/frontend as Git submodules so you can run everything from `playwright-tests` without duplicating source files.
+
+From the `playwright-tests/` repository root:
+
+```bash
+git submodule add <backend-repo-url> backend
+git submodule add <frontend-repo-url> frontend
+git submodule update --init --recursive
+```
+
+If cloning fresh:
+
+```bash
+git clone --recurse-submodules <playwright-tests-repo-url>
+```
+
+## Start App Stack (from playwright-tests)
+
+Use the local compose file:
 
 ```bash
 docker compose up -d --build
 ```
+
+The compose file expects:
+
+- `./backend` (submodule)
+- `./frontend` (submodule)
+
+Database and JWT env values are already set in `docker-compose.yml` defaults.
 
 Default URLs:
 
@@ -32,13 +62,42 @@ npm install
 npm run install:browsers
 ```
 
-## Run
+## Run Specs
+
+### Execute All Specs
 
 ```bash
 npm test
+```
+
+Runs all test suites across all projects (API, UI-Chromium, UI-Firefox, UI-webkit).
+
+### Execute API Specs Only
+
+```bash
 npm run test:api
+```
+
+Runs `specs/api/smoke.spec.ts` — tests backend endpoints using Playwright `request` against `http://localhost:3000`.
+
+### Execute UI Specs Only
+
+```bash
 npm run test:ui
 ```
+
+Runs `specs/e2e/smoke.spec.ts` across all three browsers (Chromium, Firefox, WebKit) against `http://localhost:8080`.
+
+Browser-specific:
+```bash
+npm run test:ui:chromium
+npm run test:ui:firefox
+npm run test:ui:webkit
+```
+
+### Note on Trace Specs
+
+The file `specs/e2e/trace-fail.spec.ts` contains intentionally failing tests (marked `test.skip`). These are skipped by default but used to validate Playwright trace/screenshot capture. To enable them, modify the spec file.
 
 ## Playwright-BDD
 
