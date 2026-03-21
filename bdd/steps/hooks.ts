@@ -1,22 +1,25 @@
-import { Before, After } from './fixtures';
+import { createBdd } from 'playwright-bdd';
+import { test } from './fixtures';
 
-Before(async function () {
+const { Before, After } = createBdd(test);
+
+Before(async () => {
   console.log(`[Before] Starting scenario...`);
 });
 
-Before({ tags: '@api' }, async function () {
+Before({ tags: '@api' }, async () => {
   console.log(`[Before @api] Preparing API test environment...`);
 });
 
-Before({ tags: '@ui' }, async function () {
+Before({ tags: '@ui' }, async () => {
   console.log(`[Before @ui] Preparing UI test environment...`);
 });
 
-After(async function () {
+After(async () => {
   console.log(`[After] Scenario completed.`);
 });
 
-After({ tags: '@ui' }, async function () {
+After({ tags: '@ui' }, async () => {
   // Take screenshot on UI test completion for debugging
   console.log(`[After @ui] UI scenario cleanup...`);
 });
