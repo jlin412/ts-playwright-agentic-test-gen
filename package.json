@@ -27,7 +27,7 @@
     "debug:trace:on": "playwright test --trace on",
     "debug:bdd:trace:on": "npm run bddgen && playwright test -c playwright.bdd.config.ts --trace on",
     "debug:trace:open": "playwright show-trace",
-    "debug:bdd:trace:open": "playwright show-trace",
+    "debug:bdd:trace:open": "npm run debug:trace:open",
     "report": "playwright show-report",
     "report:bdd:html": "npx http-server ./cucumber-report -c-1 -a localhost -o index.html",
     "install:browsers": "playwright install"
