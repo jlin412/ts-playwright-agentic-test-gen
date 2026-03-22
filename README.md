@@ -118,6 +118,7 @@ Overrides:
 - `CI=true` (enables CI-oriented Playwright behavior)
 - `OPENAI_API_KEY=<your-key>` (required only for local MCP code-generation server usage)
 
+> Security note: `OPENAI_API_KEY` is a secret credential. Do **not** commit this value or any `.env` file containing it to version control. Prefer setting it via your shell environment locally (for example, `export OPENAI_API_KEY=...`) and via your CI/CD platform's secret manager in automation (for example, GitHub Actions secrets, GitLab CI variables, etc.).
 ## Test Execution Matrix
 
 ### Run all specs
