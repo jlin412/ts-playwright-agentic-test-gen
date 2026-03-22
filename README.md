@@ -70,13 +70,11 @@ High-level process:
 
 ## Setup and Run
 
-### 1) Add backend/frontend as submodules (no code duplication)
+### 1) Initialize backend/frontend submodules
 
 From the `playwright-tests/` repository root:
 
 ```bash
-git submodule add <backend-repo-url> backend
-git submodule add <frontend-repo-url> frontend
 git submodule update --init --recursive
 ```
 
@@ -84,6 +82,14 @@ If cloning fresh:
 
 ```bash
 git clone --recurse-submodules <playwright-tests-repo-url>
+```
+
+Optional: if you want to use your own backend/frontend forks, update submodule URLs before running the init command:
+
+```bash
+git submodule set-url backend <your-backend-fork-url>
+git submodule set-url frontend <your-frontend-fork-url>
+git submodule update --init --recursive
 ```
 
 ### 2) Start the app stack
