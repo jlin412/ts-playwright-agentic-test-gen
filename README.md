@@ -251,7 +251,7 @@ Report/output locations:
 - `playwright-report/index.html`
 - `cucumber-report/index.html`
 - `cucumber-report/data/`
-- `cucumber-report/trace 2/` (trace artifacts from fail/debug scenarios)
+- `cucumber-report/trace*/` (trace artifacts from fail/debug scenarios; exact folder name depends on reporter configuration)
 
 ## Playwright MCP
 
