@@ -1,0 +1,21 @@
+# Use official Playwright image with pre-installed browsers and dependencies
+FROM mcr.microsoft.com/playwright:v1.50.0-jammy
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install dependencies (browsers already in base image)
+RUN npm ci
+
+# Copy entire codebase
+COPY . .
+
+# Install Playwright BDD dependencies if needed
+RUN npm run bddgen || true
+
+# Default command - can be overridden by docker-compose or docker run
+ENTRYPOINT ["npm"]
+CMD ["run", "test"]

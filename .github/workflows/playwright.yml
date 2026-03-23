@@ -115,3 +115,112 @@ jobs:
     - name: Stop Docker app stack
       if: always()
       run: docker compose down -v
+
+  test-docker:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository (with submodules)
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Start Docker app stack with tests
+      run: docker compose --profile tests up -d --build
+
+    - name: Wait for backend and frontend readiness
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        echo "Waiting for backend health check"
+        for i in {1..90}; do
+          if docker compose exec db sh -c 'pg_isready -U realworld -d realworld' > /dev/null 2>&1; then
+            echo "Backend dependencies are ready"
+            break
+          fi
+
+          if [ "$i" -eq 90 ]; then
+            echo "Backend dependencies did not become ready in time"
+            docker compose ps
+            docker compose logs db backend
+            exit 1
+          fi
+
+          sleep 2
+        done
+
+    - name: Wait for Playwright container tests to complete
+      shell: bash
+      run: |
+        set -euo pipefail
+        
+        echo "Waiting for Playwright tests to complete..."
+        exit_code=0
+        docker compose logs --follow playwright 2>&1 | sed 's/^/[PLAYWRIGHT] /' &
+        logs_pid=$!
+        
+        # Wait for playwright service to finish
+        for i in {1..600}; do
+          if docker compose ps playwright | grep -q "Exit"; then
+            exit_code=$(docker compose ps playwright | grep Exit | grep -oE '[0-9]+$' || echo 0)
+            kill $logs_pid 2>/dev/null || true
+            break
+          fi
+          
+          if [ "$i" -eq 600 ]; then
+            echo "Playwright tests did not complete in time"
+            docker compose ps
+            kill $logs_pid 2>/dev/null || true
+            exit 1
+          fi
+          
+          sleep 1
+        done
+        
+        exit $exit_code
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-docker
+        path: playwright-report/
+        retention-days: 30
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: test-results-docker
+        path: test-results/
+        retention-days: 30
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: cucumber-report-docker
+        path: cucumber-report/
+        retention-days: 30
+
+    - name: Capture Docker logs
+      if: always()
+      run: |
+        docker compose logs db > db-docker.log || true
+        docker compose logs backend > backend-docker.log || true
+        docker compose logs frontend > frontend-docker.log || true
+        docker compose logs playwright > playwright.log || true
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: docker-logs
+        path: |
+          db-docker.log
+          backend-docker.log
+          frontend-docker.log
+          playwright.log
+        retention-days: 30
+
+    - name: Stop Docker app stack
+      if: always()
+      run: docker compose --profile tests down -v
