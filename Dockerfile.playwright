@@ -16,25 +16,8 @@ COPY . .
 # Install Playwright BDD dependencies
 RUN npm run bddgen || true
 
-# Create test runner script that runs both traditional specs and BDD tests (API + UI)
-RUN mkdir -p /app/scripts && cat > /app/scripts/test-all.sh << 'EOF'
-#!/bin/bash
-set -e
-
-# Exit on first error after giving services time to initialize
-sleep 5
-
-echo "========================================"
-echo "Running Traditional Playwright Specs (API + UI)"
-echo "========================================"
-npm run test
-
-echo ""
-echo "========================================"
-echo "Running Playwright-BDD Specs (API + UI)"
-echo "========================================"
-npm run test:bdd
-EOF
+# Copy and set up test runner script
+COPY scripts/test-all.sh /app/scripts/test-all.sh
 RUN chmod +x /app/scripts/test-all.sh
 
 # Default command runs test script
