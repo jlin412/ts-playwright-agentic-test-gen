@@ -1,5 +1,5 @@
 # Use official Playwright image with pre-installed browsers and dependencies
-FROM mcr.microsoft.com/playwright:v1.50.0-jammy
+FROM mcr.microsoft.com/playwright:v1.57.0-jammy
 
 # Set working directory
 WORKDIR /app
@@ -16,7 +16,7 @@ COPY . .
 # Install Playwright BDD dependencies
 RUN npm run bddgen || true
 
-# Create test runner script that runs both traditional specs and BDD tests
+# Create test runner script that runs both traditional specs and BDD tests (API + UI)
 RUN mkdir -p /app/scripts && cat > /app/scripts/test-all.sh << 'EOF'
 #!/bin/bash
 set -e
@@ -25,15 +25,15 @@ set -e
 sleep 5
 
 echo "========================================"
-echo "Running Traditional Playwright Specs (API)"
+echo "Running Traditional Playwright Specs (API + UI)"
 echo "========================================"
-npm run test:api
+npm run test
 
 echo ""
 echo "========================================"
-echo "Running Playwright-BDD Specs (API)"
+echo "Running Playwright-BDD Specs (API + UI)"
 echo "========================================"
-npm run test:bdd:api
+npm run test:bdd
 EOF
 RUN chmod +x /app/scripts/test-all.sh
 
