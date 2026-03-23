@@ -45,5 +45,27 @@ services:
     ports:
       - "8080:80"
 
+  playwright:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.playwright
+    depends_on:
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_started
+    environment:
+      # Docker network URLs for container-to-container communication
+      API_URL: http://backend:3000
+      UI_URL: http://frontend
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./test-results:/app/test-results
+      - ./cucumber-report:/app/cucumber-report
+    networks:
+      - default
+    profiles:
+      - tests
+
 volumes:
   db_data:
