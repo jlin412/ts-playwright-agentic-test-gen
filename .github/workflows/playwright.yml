@@ -45,31 +45,25 @@ jobs:
       shell: bash
       run: |
         set -euo pipefail
-        
+
         echo "Waiting for Playwright tests to complete..."
-        exit_code=0
+
+        # Get container ID before following logs (container already started in previous step)
+        container_id=$(docker compose ps -q playwright)
+
+        # Follow logs in background for real-time output
         docker compose logs --follow playwright 2>&1 | sed 's/^/[PLAYWRIGHT] /' &
         logs_pid=$!
-        
-        # Wait for playwright service to finish
-        for i in {1..600}; do
-          if docker compose ps playwright | grep -q "Exit"; then
-            exit_code=$(docker compose ps playwright | grep Exit | grep -oE '[0-9]+$' || echo 0)
-            kill $logs_pid 2>/dev/null || true
-            break
-          fi
-          
-          if [ "$i" -eq 600 ]; then
-            echo "Playwright tests did not complete in time"
-            docker compose ps
-            kill $logs_pid 2>/dev/null || true
-            exit 1
-          fi
-          
-          sleep 1
-        done
-        
-        exit $exit_code
+
+        # Block until container exits and capture its exit code
+        exit_code=$(docker wait "$container_id")
+
+        # Stop log following
+        kill $logs_pid 2>/dev/null || true
+        wait $logs_pid 2>/dev/null || true
+
+        echo "Playwright tests completed with exit code: $exit_code"
+        exit "$exit_code"
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
