@@ -7,15 +7,35 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install dependencies (browsers already in base image)
+# Install dependencies
 RUN npm ci
 
 # Copy entire codebase
 COPY . .
 
-# Install Playwright BDD dependencies if needed
+# Install Playwright BDD dependencies
 RUN npm run bddgen || true
 
-# Default command - can be overridden by docker-compose or docker run
-ENTRYPOINT ["npm"]
-CMD ["run", "test"]
+# Create test runner script that runs both traditional specs and BDD tests
+RUN mkdir -p /app/scripts && cat > /app/scripts/test-all.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Exit on first error after giving services time to initialize
+sleep 5
+
+echo "========================================"
+echo "Running Traditional Playwright Specs (API)"
+echo "========================================"
+npm run test:api
+
+echo ""
+echo "========================================"
+echo "Running Playwright-BDD Specs (API)"
+echo "========================================"
+npm run test:bdd:api
+EOF
+RUN chmod +x /app/scripts/test-all.sh
+
+# Default command runs test script
+CMD ["/app/scripts/test-all.sh"]

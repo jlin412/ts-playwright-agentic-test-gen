@@ -51,12 +51,13 @@ services:
       dockerfile: ./Dockerfile.playwright
     depends_on:
       backend:
-        condition: service_healthy
+        condition: service_started
       frontend:
         condition: service_started
     environment:
-      PLAYWRIGHT_BASE_URL: http://frontend
-      PLAYWRIGHT_API_BASE_URL: http://backend:3000/api
+      # Docker network URLs for container-to-container communication
+      API_URL: http://backend:3000
+      UI_URL: http://frontend
     volumes:
       - ./playwright-report:/app/playwright-report
       - ./test-results:/app/test-results
