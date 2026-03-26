@@ -1,8 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
-import { defineBddConfig, cucumberReporter } from 'playwright-bdd';
+import { defineBddConfig } from 'playwright-bdd';
 
 const apiURL = process.env.API_URL ?? 'http://localhost:3000';
 const uiURL = process.env.UI_URL ?? 'http://localhost:8080';
+const smokeOnly = process.env.SMOKE_ONLY === '1';
 
 const testDir = defineBddConfig({
   features: 'bdd/features/*.feature',
@@ -11,6 +12,7 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
+  grepInvert: smokeOnly ? /@fail/ : undefined,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -18,10 +20,10 @@ export default defineConfig({
   reporter: [
     ['list'], 
     ['html', { open: 'never' }],
-    cucumberReporter('html', { 
+    ['./bdd/cucumber-reporter.cjs', {
       outputFile: 'cucumber-report/index.html',
       externalAttachments: true,
-    }),
+    }],
   ],
   use: {
     screenshot: 'only-on-failure',
@@ -37,7 +39,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-chromium',
-      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/(?!smoke-api).*\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: uiURL,
@@ -45,7 +47,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-firefox',
-      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/(?!smoke-api).*\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Firefox'],
         baseURL: uiURL,
@@ -53,7 +55,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-webkit',
-      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/(?!smoke-api).*\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Safari'],
         baseURL: uiURL,
