@@ -11,6 +11,7 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
+  testIgnore: /.features-gen\/bdd\/features\/trace-fail\.feature\.spec\.js/,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -37,7 +38,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-chromium',
-      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/(?!smoke-api).*\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: uiURL,
@@ -45,7 +46,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-firefox',
-      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/(?!smoke-api).*\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Firefox'],
         baseURL: uiURL,
@@ -53,7 +54,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-webkit',
-      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/(?!smoke-api).*\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Safari'],
         baseURL: uiURL,
