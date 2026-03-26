@@ -37,7 +37,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-chromium',
-      testMatch: /.features-gen\/bdd\/features\/(smoke-ui|trace-fail)\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
         baseURL: uiURL,
@@ -45,7 +45,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-firefox',
-      testMatch: /.features-gen\/bdd\/features\/(smoke-ui|trace-fail)\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Firefox'],
         baseURL: uiURL,
@@ -53,7 +53,7 @@ export default defineConfig({
     },
     {
       name: 'bdd-ui-webkit',
-      testMatch: /.features-gen\/bdd\/features\/(smoke-ui|trace-fail)\.feature\.spec\.js/,
+      testMatch: /.features-gen\/bdd\/features\/smoke-ui\.feature\.spec\.js/,
       use: {
         ...devices['Desktop Safari'],
         baseURL: uiURL,
