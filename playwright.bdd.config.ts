@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import { defineBddConfig, cucumberReporter } from 'playwright-bdd';
+import { defineBddConfig } from 'playwright-bdd';
 
 const apiURL = process.env.API_URL ?? 'http://localhost:3000';
 const uiURL = process.env.UI_URL ?? 'http://localhost:8080';
@@ -20,10 +20,10 @@ export default defineConfig({
   reporter: [
     ['list'], 
     ['html', { open: 'never' }],
-    cucumberReporter('html', { 
+    ['./bdd/cucumber-reporter.cjs', {
       outputFile: 'cucumber-report/index.html',
       externalAttachments: true,
-    }),
+    }],
   ],
   use: {
     screenshot: 'only-on-failure',
