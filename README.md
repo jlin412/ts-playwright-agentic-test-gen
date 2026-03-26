@@ -186,6 +186,12 @@ npm run test:bdd:tracefail
 
 Docker is used here to run the app stack (db/backend/frontend). Playwright tests run on the host Node environment.
 
+The frontend Docker image also applies the local overlay used in CI during the build:
+
+- copies `assets/main.css` into the frontend public assets
+- rewrites the broken external stylesheet reference to use the local CSS file
+- rewrites the frontend API root to the Docker build arg value (`REACT_APP_API_ROOT`)
+
 Start the app stack:
 
 ```bash
