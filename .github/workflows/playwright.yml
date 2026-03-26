@@ -72,7 +72,7 @@ jobs:
           sed -i "s|https://conduit.productionready.io/api|${API_URL}/api|" frontend/src/agent.js
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install
 
       - name: Start backend
         working-directory: backend
