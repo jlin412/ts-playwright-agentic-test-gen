@@ -120,30 +120,77 @@ jobs:
           done
 
       - name: Run Playwright specs
-        run: npm test
+        env:
+          API_URL: http://127.0.0.1:3000
+          UI_URL: http://127.0.0.1:4100
+        run: npx playwright test
+
+      - name: Preserve Playwright spec reports
+        if: always()
+        run: |
+          rm -rf playwright-report-specs test-results-specs
+          if [ -d playwright-report ]; then mv playwright-report playwright-report-specs; fi
+          if [ -d test-results ]; then mv test-results test-results-specs; fi
+
+      - name: Generate BDD specs
+        env:
+          API_URL: http://127.0.0.1:3000
+          UI_URL: http://127.0.0.1:4100
+        run: npm run bddgen
 
       - name: Run Playwright BDD specs
-        run: npm run test:bdd
+        env:
+          API_URL: http://127.0.0.1:3000
+          UI_URL: http://127.0.0.1:4100
+        run: npx playwright test -c playwright.bdd.config.ts
+
+      - name: Preserve Playwright BDD reports
+        if: always()
+        run: |
+          rm -rf playwright-report-bdd test-results-bdd cucumber-report-bdd
+          if [ -d playwright-report ]; then mv playwright-report playwright-report-bdd; fi
+          if [ -d test-results ]; then mv test-results test-results-bdd; fi
+          if [ -d cucumber-report ]; then mv cucumber-report cucumber-report-bdd; fi
+
+      - name: Capture app logs
+        if: always()
+        run: |
+          cp backend.log backend-ci.log || true
+          cp frontend.log frontend-ci.log || true
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-node
-          path: playwright-report/
+          name: playwright-report-specs
+          path: playwright-report-specs/
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: test-results-node
-          path: test-results/
+          name: test-results-specs
+          path: test-results-specs/
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: cucumber-report-node
-          path: cucumber-report/
+          name: playwright-report-bdd
+          path: playwright-report-bdd/
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: test-results-bdd
+          path: test-results-bdd/
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: cucumber-report-bdd
+          path: cucumber-report-bdd/
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
@@ -153,4 +200,6 @@ jobs:
           path: |
             backend.log
             frontend.log
+            backend-ci.log
+            frontend-ci.log
           retention-days: 30
