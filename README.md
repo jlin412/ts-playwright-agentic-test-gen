@@ -184,58 +184,63 @@ npm run test:bdd:tracefail
 
 ### Local Docker Testing
 
-Tests can run inside Docker containers, which ensures a consistent, reproducible environment. This is useful for verifying tests work the same way they will run in CI.
+Docker is used here to run the app stack (db/backend/frontend). Playwright tests run on the host Node environment.
 
-Start the full Docker stack including tests:
+Start the app stack:
 
 ```bash
-docker compose --profile tests up --build
+docker compose up -d --build
 ```
 
-The `--profile tests` flag activates the Playwright test service (not enabled by default locally). This command:
+Then run tests from the host:
 
-- Starts the backend, frontend, and database services as normal.
-- Starts a Playwright container that runs `npm test` (traditional specs + API tests).
-- Mounts volumes for reports and test results so you can inspect them on your host after completion.
+```bash
+npm test
+npm run test:bdd
+```
 
 ### Docker vs. Local Test Execution
 
 | Aspect | Local (Host) | Docker |
 |--------|------|--------|
-| **Speed** | Faster (no container overhead) | ~10-20s slower (container startup) |
-| **Environment** | Host-specific (OS, Node version) | Reproducible (Playwright official image) |
-| **Use Case** | Development iteration | CI verification, debugging environment differences |
+| **Speed** | Faster test execution, no containerized Playwright startup | App stack startup overhead |
+| **Environment** | Host Node + Playwright browsers | Reproducible app services (db/backend/frontend) |
+| **Use Case** | Test execution and debugging | App dependency provisioning |
 | **Requires** | Node.js 20+, npm | Docker Desktop/Engine only |
-| **Browser Install** | Manual via `npm run install:browsers` | Pre-installed in Docker image |
+| **Browser Install** | Manual via `npm run install:browsers` | N/A (Playwright runs on host) |
 
-### Docker Test Service Environment
+### Docker App Service Environment
 
-Inside the Docker container, tests communicate with the app stack using Docker network names:
+The app services communicate on the Docker network:
 
 - Backend: `http://backend:3000`
 - Frontend: `http://frontend`
 - Database: `postgres://realworld:realworld@db:5432/realworld` (via backend)
 
-These are set automatically via environment variables in the Dockerfile and docker-compose.yml, so the same test code works in both local and Docker environments.
+Host-run tests use:
+
+- API: `http://localhost:3000`
+- UI: `http://localhost:8080`
 
 ### Recommended Docker Commands
 
-Run full tests in Docker (traditional + BDD):
+Start app stack:
 
 ```bash
-docker compose --profile tests up --build
+docker compose up -d --build
 ```
 
-Run only API tests in Docker:
+Stop app stack:
 
 ```bash
-docker compose run --profile tests playwright npm run test:api
+docker compose down -v
 ```
 
-Run only BDD specs in Docker:
+Run tests on host:
 
 ```bash
-docker compose run --profile tests playwright npm run test:bdd
+npm test
+npm run test:bdd
 ```
 
 View test results after Docker run:
@@ -251,11 +256,11 @@ open cucumber-report/index.html
 open cucumber-report/trace*/index.html
 ```
 
-### CI/CD Docker Testing
+### CI/CD Testing
 
-The project includes a GitHub Actions workflow (`test-docker` job) that automatically runs tests in Docker on every push and pull request. Both traditional (ubuntu-latest + host Node) and Docker test jobs run in parallel to catch environment-specific issues early.
+CI uses host Node-based Playwright execution with app dependencies provisioned by workflow services/steps.
 
-To see the Docker test job configuration, inspect `.github/workflows/playwright.yml`.
+To see the CI job configuration, inspect `.github/workflows/playwright.yml`.
 
 ## Debugging: UI Mode and Trace Viewer
 
