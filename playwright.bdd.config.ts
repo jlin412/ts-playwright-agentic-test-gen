@@ -3,6 +3,7 @@ import { defineBddConfig, cucumberReporter } from 'playwright-bdd';
 
 const apiURL = process.env.API_URL ?? 'http://localhost:3000';
 const uiURL = process.env.UI_URL ?? 'http://localhost:8080';
+const smokeOnly = process.env.SMOKE_ONLY === '1';
 
 const testDir = defineBddConfig({
   features: 'bdd/features/*.feature',
@@ -11,7 +12,7 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
-  testIgnore: /.features-gen\/bdd\/features\/trace-fail\.feature\.spec\.js/,
+  grepInvert: smokeOnly ? /@fail/ : undefined,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

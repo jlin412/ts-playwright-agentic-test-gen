@@ -4,7 +4,7 @@ import { expect, test } from '../fixtures';
 // Trace is retained on failure via playwright.config.ts (trace: 'retain-on-failure').
 
 test.describe('Trace viewer demo', () => {
-  test('intentional failure generates trace', async ({ homePage }) => {
+  test.fail('Intentional failure generates trace', async ({ homePage }) => {
     await homePage.goto();
     await homePage.expectLoaded();
 
